@@ -1,0 +1,30 @@
+# Backend .dockerignore
+# Excludes files that should NOT be copied into the Docker image
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Runtime data (generated at runtime, not baked in)
+captured_images/
+attendance_records/
+
+# Development / docs
+README.md
+*.md
+
+# Git
+.git/
+.gitignore
+
+# IDE
+.vscode/
+.idea/
