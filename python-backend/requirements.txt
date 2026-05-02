@@ -1,14 +1,15 @@
 # Assignment Notifier — Python Backend Dependencies
-# Last updated: February 28, 2026
-# Python 3.8+ required
+# Python 3.11 required (matches Dockerfile base image)
 # Install with: pip install -r requirements.txt
 
 # ── Web Framework ──────────────────────────────────────────────────────────────
-flask              # Lightweight WSGI web framework
-flask-cors         # Cross-Origin Resource Sharing (CORS) headers for Flask
+flask==3.0.3
+flask-cors==4.0.1
+
+# ── Production WSGI Server ─────────────────────────────────────────────────────
+# Gunicorn is used instead of Flask's built-in dev server in GCR
+gunicorn==22.0.0
 
 # ── Computer Vision ────────────────────────────────────────────────────────────
-opencv-python      # OpenCV: camera feed, image processing, and frame capture
-
-# ── Optional: Enhanced image handling ─────────────────────────────────────────
-# Pillow           # Uncomment if additional image processing is needed
+# opencv-python-headless has NO GUI/display dependencies — required for containers
+opencv-python-headless==4.10.0.84
