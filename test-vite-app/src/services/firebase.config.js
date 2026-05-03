@@ -10,16 +10,17 @@ import { getAuth, GoogleAuthProvider } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+// Firebase configuration
+// Reads from Vite env vars (local .env or Cloud Run build vars).
+// Falls back to the project values so the app works even if build vars are not set.
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID,
-  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "AIzaSyBNys7JagJc3DCyeZ-KCen9Pg21AmeweoQ",
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "college-management-syste-34d63.firebaseapp.com",
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "college-management-syste-34d63",
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "college-management-syste-34d63.firebasestorage.app",
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "277023675773",
+  appId: import.meta.env.VITE_FIREBASE_APP_ID || "1:277023675773:web:c6bede8cdf013671916814",
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID || "G-PQGKSH10SH"
 };
 
 // Initialize Firebase
