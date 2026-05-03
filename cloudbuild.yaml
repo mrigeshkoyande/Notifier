@@ -1,13 +1,22 @@
 # ── Cloud Build Pipeline ───────────────────────────────────────────────────────
 # Builds and deploys both services to Google Cloud Run.
 #
-# Prerequisites:
-#   1. gcloud CLI authenticated: gcloud auth login
-#   2. Project set: gcloud config set project YOUR_PROJECT_ID
-#   3. APIs enabled: Cloud Build, Cloud Run, Artifact Registry
-#   4. Create Artifact Registry repo:
-#      gcloud artifacts repositories create navix-ai \
-#        --repository-format=docker --location=asia-south1
+# Cloud Build clones the repo into /workspace/.
+# Since cloudbuild.yaml lives at the repo root, all paths below are
+# relative to /workspace/ — i.e. the repo root itself.
+#
+# Repo structure (as Cloud Build sees it):
+#   /workspace/
+#   ├── cloudbuild.yaml         ← this file
+#   ├── docker-compose.yml
+#   ├── python-backend/
+#   │   ├── Dockerfile
+#   │   ├── server.py
+#   │   └── requirements.txt
+#   └── test-vite-app/
+#       ├── Dockerfile
+#       ├── nginx.conf
+#       └── src/
 #
 # Trigger manually:
 #   gcloud builds submit . --config=cloudbuild.yaml \
@@ -17,12 +26,14 @@
 #       _VITE_FIREBASE_API_KEY=your_key,...
 #
 # Or connect this repo to Cloud Build triggers for CI/CD on git push.
+# Set all _VITE_* substitution values in the trigger config (NOT here).
 
 substitutions:
   _REGION: asia-south1
   _REPO: navix-ai
-  _PROJECT_ID: ${PROJECT_ID}
-  # Firebase env vars (set in Cloud Build trigger substitutions — NOT hardcoded here)
+  # _PROJECT_ID must be passed at trigger time via --substitutions or trigger UI
+  _PROJECT_ID: ''
+  # Firebase env vars — set in Cloud Build trigger substitutions, NOT hardcoded
   _VITE_FIREBASE_API_KEY: ''
   _VITE_FIREBASE_AUTH_DOMAIN: ''
   _VITE_FIREBASE_PROJECT_ID: ''
@@ -38,9 +49,10 @@ options:
 
 steps:
   # ── Step 1: Build the Python Backend image ─────────────────────────────────
+  # 'dir' is relative to /workspace/ (the repo root)
   - name: 'gcr.io/cloud-builders/docker'
     id: build-backend
-    dir: 'Assignment-notifier-/python-backend'
+    dir: 'python-backend'
     args:
       - build
       - '-t'
@@ -79,9 +91,10 @@ steps:
       - '--set-env-vars=FLASK_DEBUG=false,BACKEND_BASE_URL=${_VITE_BACKEND_URL}'
 
   # ── Step 4: Build the Frontend image ───────────────────────────────────────
+  # 'dir' is relative to /workspace/ (the repo root)
   - name: 'gcr.io/cloud-builders/docker'
     id: build-frontend
-    dir: 'Assignment-notifier-/test-vite-app'
+    dir: 'test-vite-app'
     args:
       - build
       - '-t'
