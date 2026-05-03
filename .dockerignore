@@ -1,0 +1,43 @@
+# Root .dockerignore
+# Prevents large/unnecessary files from being sent to the Docker build context
+
+# Node modules (rebuilt inside Docker)
+node_modules/
+test-vite-app/node_modules/
+notification-app/node_modules/
+
+# Build outputs
+dist/
+test-vite-app/dist/
+notification-app/dist/
+
+# Python
+python-backend/__pycache__/
+python-backend/*.py[cod]
+python-backend/.venv/
+python-backend/venv/
+python-backend/captured_images/
+python-backend/attendance_records/
+
+# Git & IDE
+.git/
+.gitignore
+.vscode/
+.github/
+
+# Environment files (secrets)
+.env
+.env.local
+test-vite-app/.env
+test-vite-app/.env.local
+
+# Docs & scripts
+*.md
+*.bat
+*.sh
+CHANGELOG.md
+CONTRIBUTING.md
+
+# Logs
+*.log
+npm-debug.log*
